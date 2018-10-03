@@ -1,0 +1,145 @@
+﻿@model string
+@{
+    ViewBag.Title = "_pvJobClass";
+}
+@Styles.Render("~/bundles/ins-auto-complete")
+
+@Scripts.Render("~/bundles/auto-complete")
+<style type="text/css">
+    .DataSelector {
+        height: 30px !important;
+        font-size: 18px;
+        border: 1px solid #ccc;
+        padding-left: 12px;
+        width: 300px;
+    }
+
+    .client_occupation_class {
+        margin-bottom: 3px;
+    }
+
+    .TextRed {
+        color: red;
+    }
+
+    .TextForJob {
+        color: #0505bf;
+    }
+</style>
+
+<script type="text/javascript">
+    var PopulateData = '@ViewBag.PopulateData';
+
+    $("#jobSort").on("change", function () {
+        $("#Joblist").show();
+        $("#Joblist").val("");
+        $("#client_occupation_class_code").val("");
+        $("#client_occupation_class").val("");
+        $("#client_occupation_class_name").val("");
+        $("#ClassName").html("未選擇");
+    });
+
+    function classLv(level) {
+        var lv = parseInt(level);
+        switch (lv) {
+            case 1:
+                return "第一類";
+            case 2:
+                return "第二類";
+            case 3:
+                return "第三類";
+            case 4:
+                return "第四類";
+            case 5:
+                return "第五類";
+            case 6:
+                return "第六類";
+            default:
+                return "";
+        }
+    }
+
+    $(".autocomplete-Career").autocomplete({
+		position: {
+			at: "left bottom+1px"
+        },
+        minLength: 0,
+        source: function (req, rspFunc) {
+            if ($("#jobSort").val() == "" && $.trim($("#Joblist").val()) == "") {
+                var data = [];
+                rspFunc(data);
+                return;
+            }
+
+			$.ajax({
+				url: "@Url.Action("getOccupationList", "Service", new { area = "" })",
+                data: { OCCUPATION_CODE: $("#jobSort").val(), KeyWords: req.term, planCode: "@Model"},
+				type: "post",
+				success: function (rsp) {
+                    var data = [];
+                    if (rsp && rsp.IsSuccess && rsp.Result) {
+                        data = rsp.Result;
+                        if (data.length < 1) {
+                            data.push({ OCCUPATION_CODE: "", OCCUPATION_DESC: "查無職業資料", OCCUPATION_CLASSName: "" });
+                        }
+					}
+					rspFunc(data);
+				}
+			});
+		},
+        search: function (evt, ui) {
+            var $this = $(this);
+			//$($this.data("code")).val("");
+		},
+        select: function (evt, ui) {
+            evt.preventDefault();
+
+            var $this = $(this);
+            if ($.trim(ui.item.OCCUPATION_DESC)) {
+                $this.val(ui.item.OCCUPATION_DESC);
+                //$($this.data("code")).val(ui.item.value);
+                $("#client_occupation_class_code").val(ui.item.OCCUPATION_CODE);
+                $("#client_occupation_class").val(ui.item.OCCUPATION_CLASS);
+                $("#client_occupation_class_name").val(ui.item.OCCUPATION_DESC);
+                var _ClassLV = ui.item.OCCUPATION_CLASS;
+                $("#ClassName").html(classLv(_ClassLV) + " " + ui.item.OCCUPATION_DESC);
+            }
+		    return false;
+		},
+        focus: function (evt, ui) {
+			evt.preventDefault();
+			return false;
+		}
+    }).each(function () {
+        $(this).data("ui-autocomplete")._renderItem = function (ul, item) {
+            var $li = $("<li>").attr("data-value", item.OCCUPATION_CODE);
+            if ($.trim(item.OCCUPATION_DESC)) {
+                if (item.OCCUPATION_CODE == "")
+                    $li.append($("<a>").text(item.OCCUPATION_DESC));
+                else
+                    $li.append($("<a>").text(classLv(item.OCCUPATION_CLASS) + "【" + item.OCCUPATION_CLASSName + "】：" + item.OCCUPATION_DESC));
+            }
+            else {
+                $li.append($("<a class='disable'>").text(item.OCCUPATION_DESC));
+            }
+            return $li.appendTo(ul);
+        };
+    }).focus(function () {
+        if ($("#jobSort").val() != "") {
+            $(this).autocomplete("search");
+        }
+    });
+</script>
+
+<div class="bullet-cont">
+    <div style="margin-bottom: 10px;">請問您的職業：<text id="ClassName" class="TextForJob">未選擇</text></div>
+    <span>
+        @Html.DropDownList("jobSort", InsuranceWeb.Helper.InsuranceHelper.GetJobClass(), "全部職業類別分類", new { @class = "client_occupation_class", id = "jobSort" })
+    </span>
+    <span>
+        <input id="Joblist" type="text" placeholder="請輸入欲填寫之職業" maxlength="50" class="DataSelector autocomplete-Career">
+    </span>
+    <input id="client_occupation_class_code" type="hidden" />
+    <input id="client_occupation_class" type="hidden" />
+    <input id="client_occupation_class_name" type="hidden" />
+</div>

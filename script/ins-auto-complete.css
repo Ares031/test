@@ -1,0 +1,38 @@
+﻿.ui-autocomplete .ui-menu-item {
+	padding: 2px;
+	font-weight: 400;
+}
+
+	.ui-autocomplete .ui-menu-item .ui-state-focus {
+		background: #d24a67;
+		color: white;
+		font-weight: 400;
+	}
+
+	.ui-autocomplete .ui-menu-item a {
+		display: block;
+		border: 1px solid transparent;
+		padding: 2px 25px 2px 10px;
+		color: black;
+	}
+
+		.ui-autocomplete .ui-menu-item a.disable {
+			display: block;
+			border: 1px solid transparent;
+			padding: 2px 25px 2px 10px;
+			color: white;
+			background: #e71a04;
+			cursor: not-allowed;
+		}
+
+.ui-autocomplete {
+	border: 1px solid #d24a67;
+	background: white;
+	padding: 10px 5px 0px 5px;
+	max-height: 198px;
+	overflow-x: auto;
+}
+
+	.ui-autocomplete .ui-menu-item:last-child {
+		margin-bottom: 10px;
+	}
