@@ -1,0 +1,7 @@
+//完成上一動作後載入
+var d = $.Deferred();
+$("#tb-bank-code_Benf_0").val('@Model.Applicant_BankCode').trigger("blur", d);
+        $.when(d).done(function () {
+            $("#tb-branch-code_Benf_0").val($('@Model.Applicant_BranchCode').val()).trigger("change");
+            $("#account-number_Benf_0").val($('@Model.Applicant_Account').val());
+        });
