@@ -12,3 +12,27 @@ namespace InsuranceWeb.Models
 		public T Data { get; set; }
 	}
 }
+
+//--asp.net mvc中在Filter中轉跳不要使用Response.Redirect
+https://blog.csdn.net/leewhoee/article/details/5963609
+public class AnchorFilter : ActionFilterAttribute  
+    {  
+        public override void OnActionExecuting(ActionExecutingContext filterContext)  
+        {  
+                if (!string.IsNullOrEmpty(filterContext.HttpContext.Request.QueryString["r_Anchor"]))  
+                {  
+                    filterContext.Result = new RedirectResult(string.Format("{0}#{1}",  
+                                                                              filterContext.HttpContext.Request.Url.  
+                                                                                  AbsolutePath,  
+                                                                              filterContext.HttpContext.Request.  
+                                                                                  QueryString["r_Anchor"]));  
+                    //filterContext.HttpContext.Response.Redirect(string.Format("{0}#{1}",  
+                    //                                                          filterContext.HttpContext.Request.Url.  
+                    //                                                              AbsolutePath,  
+                    //                                                          filterContext.HttpContext.Request.  
+                    //                                                              QueryString["r_Anchor"]));  
+                    return;  
+                }
+            base.OnActionExecuting(filterContext);  
+        }  
+    }  
