@@ -1,1 +1,14 @@
-.....
+namespace InsuranceWeb.Models
+{
+	public class JsonReturn
+	{
+		public bool IsSuccess { get; set; }
+
+		public string Msg { get; set; }
+	}
+
+	public class JsonReturn<T> : JsonReturn
+	{
+		public T Data { get; set; }
+	}
+}
