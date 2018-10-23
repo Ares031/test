@@ -19,6 +19,11 @@ public class AnchorFilter : ActionFilterAttribute  
     {  
         public override void OnActionExecuting(ActionExecutingContext filterContext)  
         {  
+		var qryString = filterContext.HttpContext.Request.Url.Query;
+		Uri url = new Uri(finalUrl, UriKind.RelativeOrAbsolute);
+                filterContext.Result = new RedirectResult(url.OriginalString + qryString);
+                base.OnActionExecuting(filterContext);
+		//-------
                 if (!string.IsNullOrEmpty(filterContext.HttpContext.Request.QueryString["r_Anchor"]))  
                 {  
                     filterContext.Result = new RedirectResult(string.Format("{0}#{1}",  
@@ -26,13 +31,7 @@ public class AnchorFilter : ActionFilterAttribute  
                                                                                   AbsolutePath,  
                                                                               filterContext.HttpContext.Request.  
                                                                                   QueryString["r_Anchor"]));  
-                    //filterContext.HttpContext.Response.Redirect(string.Format("{0}#{1}",  
-                    //                                                          filterContext.HttpContext.Request.Url.  
-                    //                                                              AbsolutePath,  
-                    //                                                          filterContext.HttpContext.Request.  
-                    //                                                              QueryString["r_Anchor"]));  
-                    return;  
                 }
-            base.OnActionExecuting(filterContext);  
+                base.OnActionExecuting(filterContext);  
         }  
     }  
