@@ -1,0 +1,42 @@
+// https://dotblogs.com.tw/joysdw12/2013/06/04/web-api-http-message-hadnler
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http;
+using System.Net.Http;
+namespace WebApplication2
+{
+    public static class WebApiConfig
+    {
+        public class Custom1Handler : DelegatingHandler
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="request"></param>
+            /// <param name="cancellationToken"></param>
+            /// <returns></returns>
+            protected async override System.Threading.Tasks.Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, System.Threading.CancellationToken cancellationToken)
+            {
+                HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
+                response.Headers.Add("X-Custom1-Header", "This is a customer 2 handler.");
+                return response;
+            }
+        }
+
+        public static void Register(HttpConfiguration config)
+        {
+            // Web API 設定和服務
+
+            // Web API 路由
+            config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+            config.MessageHandlers.Add(new Custom1Handler());
+        }
+    }
+}
