@@ -38,6 +38,7 @@ public class AnchorFilter : ActionFilterAttribute  
 
 //進程運行錯誤  收集器
 https://hk.saowen.com/a/3d1ec4c0b1d1bff79ceb65a4735327fc2557ff118a32e8ac5bb7ed327dc153da
+https://hk.saowen.com/a/9f1b85c9d4cead0bf833ae48f3a20c2ad78157f6f2a83d70236bab85e4a3a8cc
 /// <summary>
     /// 進程運行錯誤  收集器
     /// </summary>
