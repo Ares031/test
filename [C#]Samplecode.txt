@@ -35,3 +35,49 @@ public class AnchorFilter : ActionFilterAttribute  
                 base.OnActionExecuting(filterContext);  
         }  
     }  
+
+//進程運行錯誤  收集器
+https://hk.saowen.com/a/3d1ec4c0b1d1bff79ceb65a4735327fc2557ff118a32e8ac5bb7ed327dc153da
+/// <summary>
+    /// 進程運行錯誤  收集器
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
+    public class LogExceptionAttribute : HandleErrorAttribute
+    {
+        public override void OnException(ExceptionContext filterContext)
+        {
+            if (!filterContext.ExceptionHandled)
+            {
+                try
+                {
+                    string sForm = this.GetCollections(filterContext.HttpContext.Request.Form);
+                    string sQuery = this.GetCollections(filterContext.HttpContext.Request.QueryString);
+                    string ControllerName = string.Format("{0}Controller", filterContext.RouteData.Values["controller"] as string);
+                    string ActionName = filterContext.RouteData.Values["action"] as string;
+                    string message = string.Format(@"
+                                    在執行 controller[{0}] 的 action[{1}] 時產生異常。
+                                    異常類型：{2}
+                                    <br>異常內容：{3}
+                                    <br>引發異常的方法：{4}
+                                    <br>引發異常源：{5}
+                                    <br>參數：{6}"
+                        , ControllerName
+                        , ActionName
+                    , filterContext.Exception.GetType().Name
+                    , filterContext.Exception.Message
+                     , filterContext.Exception.TargetSite
+                     , filterContext.Exception.Source + filterContext.Exception.StackTrace
+                     , sForm + sQuery
+                     );
+                    //記錄日誌
+                    LoggerBusiness.WriteLog(message, "Web進程運行錯誤");
+                }
+                catch (Exception)
+                {
+
+                }
+
+                base.OnException(filterContext);
+            }
+        }
+//
