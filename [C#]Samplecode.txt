@@ -82,5 +82,6 @@ https://hk.saowen.com/a/9f1b85c9d4cead0bf833ae48f3a20c2ad78157f6f2a83d70236bab85
             }
         }
 //MemoryCache
+https://blog.darkthread.net/blog/session-alternative
 https://dotblogs.com.tw/wasichris/2015/11/14/153922
 https://dotblogs.com.tw/lazycodestyle/2016/07/24/155838
