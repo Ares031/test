@@ -85,3 +85,32 @@ https://hk.saowen.com/a/9f1b85c9d4cead0bf833ae48f3a20c2ad78157f6f2a83d70236bab85
 https://blog.darkthread.net/blog/session-alternative
 https://dotblogs.com.tw/wasichris/2015/11/14/153922
 https://dotblogs.com.tw/lazycodestyle/2016/07/24/155838
+
+//Entity Mapping
+public void MapToEntity<E, V>(E entity, V viewModel) where E : class where V : class
+        {
+            if (entity == null) return;
+            foreach (PropertyInfo property in viewModel.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+            {
+                foreach (Attribute attribute in Attribute.GetCustomAttributes(property))
+                {
+                    if ((attribute.GetType() == typeof(ColumnAttribute)) && ((attribute as ColumnAttribute).IsMapping))
+                    {
+                        if (!string.IsNullOrEmpty((attribute as ColumnAttribute).MappingName))
+                        {
+                            if (property.PropertyType.ToString() == "System.Boolean")
+                                entity.GetType().GetProperty((attribute as ColumnAttribute).MappingName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).SetValue(entity,
+                                    (bool)property.GetValue(viewModel, null) ? Is.Y.ToString() : Is.N.ToString(),
+                                    null);
+                            else if (property.PropertyType.ToString() == "System.Int32")
+                                entity.GetType().GetProperty((attribute as ColumnAttribute).MappingName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).SetValue(entity,
+                                    (int)property.GetValue(viewModel, null),
+                                    null);
+                            else entity.GetType().GetProperty((attribute as ColumnAttribute).MappingName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).SetValue(entity,
+                                    property.GetValue(viewModel, null) == null ? string.Empty : property.GetValue(viewModel, null).ToString(),
+                                    null);
+                        }
+                    }
+                }
+            }
+        }
