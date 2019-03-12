@@ -1,0 +1,18 @@
+SELECT [MERCHANT_NO]
+      ,[BANK_CODE]
+      ,[ICC_NO]
+      ,[ACTION]
+      ,[O_CSTATUS]
+      ,[REPORTLOSS_TIME]
+      ,[RECEIVE_DATE]
+      ,[RECEIVE_TIME]
+      ,[RETURN_CODE]
+  FROM [CCICash].[dbo].[OL_AL_REPORTLOSS_LOG_D]
+  where [MERCHANT_NO] <> ''
+  order by [MERCHANT_NO]
+  offset 61 rows
+  fetch next 10 rows only
+  
+  ---可做為分頁使用
+  offset = EF的SKIP
+  fetch next = EF的Take
