@@ -13,6 +13,6 @@ SELECT [MERCHANT_NO]
   offset 61 rows
   fetch next 10 rows only
   
-  ---可做為分頁使用
+  ---可做為分頁使用(SQL2012以上版本)
   offset = EF的SKIP
   fetch next = EF的Take
