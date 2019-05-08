@@ -21,3 +21,6 @@ https://dotblogs.com.tw/kinanson/2017/05/20/125602
 
 不要寫「假的」非同步方法
 https://www.huanlintalk.com/2016/01/dont-write-fake-async-methods.html
+
+C# async 非同步方法需要額外花費多少時間成本之評估
+https://csharpkh.blogspot.com/2019/02/async-await-performance.html
