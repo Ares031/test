@@ -6,3 +6,12 @@ https://ithelp.ithome.com.tw/articles/10193456
 
 [C#]Multiple thread和非同步的差異，並正確自訂非同步的方式
 https://dotblogs.com.tw/kinanson/2018/03/28/075558
+
+簡介.NET 4.0的多工執行利器--Task
+https://blog.darkthread.net/blog/net4-task/
+
+Asynchronous programming
+https://docs.microsoft.com/en-us/dotnet/csharp/async
+
+[C#]TPL與Async Await的觀念還有使用方式
+https://dotblogs.com.tw/kinanson/2017/05/03/075119
