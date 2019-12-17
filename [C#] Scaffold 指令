@@ -1,6 +1,6 @@
 在主控台Consoel要下的指令↓
 
-Scaffold-DbContext "Server=.\sqlexpress2014;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force -UseDatabaseNames -Tables Blog,Post
+Scaffold-DbContext "Server=123.123.123.132;Database=dbname;User ID=xx;Password=xxxxxxxxx;Trusted_Connection=True;Integrated Security=False;Integrated Security=False;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir EDMX -Force -UseDatabaseNames -Tables xxxx,xxxx1,xxxx2
 
 Scaffold-DbContext為剛剛安裝Tools套件的指令，DB連線字串依自己情況決定
 
