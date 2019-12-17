@@ -1,3 +1,4 @@
+https://dotblogs.com.tw/shadow/2018/02/02/030427
 在主控台Consoel要下的指令↓
 
 Scaffold-DbContext "Server=123.123.123.132;Database=dbname;User ID=xx;Password=xxxxxxxxx;Trusted_Connection=True;Integrated Security=False;Integrated Security=False;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir EDMX -Force -UseDatabaseNames -Tables xxxx,xxxx1,xxxx2
