@@ -1,0 +1,15 @@
+在主控台Consoel要下的指令↓
+
+Scaffold-DbContext "Server=.\sqlexpress2014;Database=Blogging;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force -UseDatabaseNames -Tables Blog,Post
+
+Scaffold-DbContext為剛剛安裝Tools套件的指令，DB連線字串依自己情況決定
+
+-OutputDir指定要輸出到專案根目錄下哪個資料夾，本文為Models資料夾
+
+-Force為工具產出的.cs檔要強制覆寫現存檔案(DB欄位Schema異動後，就給這個)
+
+-Tables參數，指定只需要載入哪些資料表(以逗號區隔)，留意大小寫最好和DB裡一樣避免出現黃字警告，沒給-Tables參數的話，預設抓DB全部的Table
+
+-UseDatabaseNames，程式碼產生出來的類別名稱要和資料庫裡的一模一樣
+
+其它參數請見官網說明：Entity Framework Core 工具的參考-Visual Studio 中的套件管理員主控台
