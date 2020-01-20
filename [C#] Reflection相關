@@ -1,0 +1,8 @@
+NET/C# 反射的的效能資料，以及高效能開發建議（反射獲取 Attribute 和反射呼叫方法）
+https://www.jishuwen.com/d/2s9p/zh-tw
+
+.NET Core/Framework 创建委托以大幅度提高反射调用的性能
+https://walterlv.com/post/create-delegate-to-improve-reflection-performance.html
+
+.NET/C# 推荐一个我设计的缓存类型（适合缓存反射等耗性能的操作，附用法）
+https://walterlv.com/post/design-a-cache-pool.html
