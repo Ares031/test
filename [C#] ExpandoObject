@@ -1,0 +1,33 @@
+https://blog.darkthread.net/blog/expandoobject/
+
+using System;
+using Microsoft.CSharp.RuntimeBinder;
+using System.Reflection;
+using System.Dynamic;
+using System.Linq;
+using System.Collections.Generic;
+ 
+namespace DynamicLab
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //將boo建立成ExpandoObject
+            dynamic boo = new ExpandoObject();
+            //直接寫boo.Name加上新的Property
+            boo.Name = "Jeffrey";
+            Console.WriteLine(boo.Name);
+            //ExpandoObject可轉型成IDictionary<stirng, object>
+            //讓我們可以用boo[someVariable]的方式加上新的成員
+            //在要動態決定物件成員名稱的場合很好用
+            IDictionary<string, object> booDict =
+                boo as IDictionary<string, object>;
+            //掛上Show方法
+            booDict["Show"] = (Action<string>)
+                (m => { Console.WriteLine(m); });
+            boo.Show("Hello, World!");
+            Console.Read();
+        }
+    }
+}
