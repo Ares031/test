@@ -1,3 +1,4 @@
+--SQL分頁指令
 SELECT [MERCHANT_NO]
       ,[BANK_CODE]
       ,[ICC_NO]
@@ -16,3 +17,6 @@ SELECT [MERCHANT_NO]
   ---可做為分頁使用(SQL2012以上版本)
   offset = EF的SKIP
   fetch next = EF的Take
+
+--entity framework 6 stored procedure complex type temp table
+https://stackoverflow.com/questions/16593473/ef-cant-infer-return-schema-from-stored-procedure-selecting-from-a-temp-table
