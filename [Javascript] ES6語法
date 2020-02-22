@@ -1,0 +1,28 @@
+//陣列函式
+nums = [1,2,3,4,5];
+//忽略
+var [,,third] = nums;
+//third=>3
+//剩餘
+var [first, ...etc] = nums;
+//first=>1
+//etc=>[2,3,4,5]
+=====================================================
+var persons = [
+  {firstname : "Malcom", lastname: "Reynolds"},
+  {firstname : "Kaylee", lastname: "Frye"},
+  {firstname : "Jayne", lastname: "Cobb"}
+];
+//陣列解構
+var [a,b,c] = persons;
+//a=>{firstname : "Malcom", lastname: "Reynolds"}
+
+//物件解構+重新命名
+var {firstname:x,lastname:y} = a;
+//x=>Malcom, y=>Reynolds
+
+//map方法, foreach的委派函式, 回傳陣列值
+var res = persons.map(({firstname:x,lastname:y})=>[x,y].join(" "));
+//res => Malcom Reynolds,Kaylee Frye,Jayne Cobb
+
+//
