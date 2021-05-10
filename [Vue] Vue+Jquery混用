@@ -1,0 +1,9 @@
+https://cn.vuejs.org/v2/api/#Vue-nextTick
+
+// 修改資料
+vm.msg = 'Hello'
+// DOM 還沒有更新
+Vue.nextTick(function () {
+  // DOM 
+  // Jquery Code
+})
