@@ -1,0 +1,105 @@
+
+
+public interface ICommContext
+{
+    bool ReadOnlyCheck { get; set; }
+    IServiceScopeFactory _IServiceScopeFactory { get; set; }
+}
+
+public static class ContextExt
+{
+    /// <summary>
+    /// 連線方式設定為ReadOnly
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="_DbContext"></param>
+    /// <returns></returns>
+    public static T ReadOnlyDB<T>(this T _DbContext) where T : DbContext
+    {
+        if (_DbContext is ICommContext)
+        {
+            ((ICommContext)_DbContext).ReadOnlyCheck = true;
+        }
+        return _DbContext;
+    }
+
+    /// <summary>
+    /// 使用區域DB物件執行EF查詢, 用在需要平行處理的DB Select查詢
+    /// </summary>
+    /// <typeparam name="TContext">DB Context</typeparam>
+    /// <typeparam name="TEntity">DAO Object</typeparam>
+    /// <param name="_DbContext"></param>
+    /// <param name="expr">Linq's Where Express</param>
+    /// <returns></returns>
+    public async static Task<List<TEntity>> NewScopeEFProcess<TContext, TEntity>(this TContext _DbContext, Expression<Func<TEntity, bool>> expr) 
+        where TEntity : class, IEntityModel, new()
+        where TContext : DbContext
+    {
+        List<TEntity> res = new List<TEntity>();
+        using(var scope = ((ICommContext)_DbContext)._IServiceScopeFactory.CreateScope())
+        {
+            var _con = scope.ServiceProvider.GetRequiredService<TContext>();
+            res = await _con.Set<TEntity>().Where(expr).ToListAsync();
+        }
+        return res;
+    }
+
+    /// <summary>
+    /// 使用區域DB物件執行StoreProcedure, 用在需要平行處理的DB StoreProcedure, 無回傳複雜模型, 只回傳 output 資料
+    /// </summary>
+    /// <typeparam name="TContext">DB Context</typeparam>
+    /// <typeparam name="TEntity">DAO Object</typeparam>
+    /// <param name="_DbContext"></param>
+    /// <param name="expr">Linq's Where Express</param>
+    /// <returns></returns>
+    public static void NewScopeSPProcess<TContext>(this TContext _DbContext, string pSPName, params SqlParameter[] pParamters)
+        where TContext : DbContext
+    {
+        using (var scope = ((ICommContext)_DbContext)._IServiceScopeFactory.CreateScope())
+        {
+            var _con = scope.ServiceProvider.GetRequiredService<TContext>();
+            _con.ExecuteStoreProcedure(pSPName, pParamters);
+        }
+    }
+
+    /// <summary>
+    /// 使用區域DB物件執行StoreProcedure, 用在需要平行處理的DB StoreProcedure, 回傳複雜模型+output資料
+    /// </summary>
+    /// <typeparam name="TContext">DB Context</typeparam>
+    /// <typeparam name="TEntity">DAO Object</typeparam>
+    /// <param name="_DbContext"></param>
+    /// <param name="expr">Linq's Where Express</param>
+    /// <returns></returns>
+    public static List<TEntity> NewScopeSPProcess<TContext, TEntity>(this TContext _DbContext, string pSPName, params SqlParameter[] pParamters)
+        where TEntity : class, IEntityModel, new()
+        where TContext : DbContext
+    {
+        List<TEntity> res = new List<TEntity>();
+        using (var scope = ((ICommContext)_DbContext)._IServiceScopeFactory.CreateScope())
+        {
+            var _con = scope.ServiceProvider.GetRequiredService<TContext>();
+            res = _con.ExecuteStoreProcedure<TEntity>(pSPName, pParamters);
+        }
+        return res;
+    }
+}
+
+//使用時在StartUp DB的生命週期使用預設Scope就好, 程式裡會自動生成新的Scope區塊執行命令
+//================使用=================
+public async Task<ResultDataModel<List<DTO_A>>> GetDailyCheckInLog(Expression<Func<DAO_A, bool>> expr)
+{
+    ResultDataModel<List<DTO_A>> result = new ResultDataModel<List<DTO_A>>();
+
+    try
+    {
+        //使用獨立的Context實體做並行查詢
+        List<DAO_A> dbDatas = await _Context.NewScopeEFProcess(expr);
+        result.ResultData = _IMapper.Map<List<DTO_A>>(dbDatas.OrderBy(o => o.CreateTime));
+    }
+    catch (Exception ex)
+    {
+        throw new GeneralException(ResultMessageEnum.DBException, ex);
+    }
+
+    return result;
+}
