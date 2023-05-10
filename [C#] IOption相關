@@ -1,0 +1,5 @@
+https://ithelp.ithome.com.tw/m/articles/10276668
+
+IOptions	檔案變動時資料不會跟著變動
+IOptionsSnapshot	注入之後內容就不會變動，但是檔案異動後所注入的資料就是異動後的資料
+IOptionsMonitor	支援熱重載，可以適用在單例(Singleton)模式的物件
