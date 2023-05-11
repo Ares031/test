@@ -6,3 +6,18 @@ https://walterlv.com/post/create-delegate-to-improve-reflection-performance.html
 
 .NET/C# 推荐一个我设计的缓存类型（适合缓存反射等耗性能的操作，附用法）
 https://walterlv.com/post/design-a-cache-pool.html
+
+動態呼叫方法
+https://www.roelvanlisdonk.nl/2014/05/23/dynamically-call-c-instance-method-by-string-name-without-performance-overhead/
+ex.
+1.直接用Invoke()呼叫
+job = typeof(SomeClass)
+------------------------
+var service = pServiceProvider.GetRequiredService(job);
+MethodInfo mInfo = job.GetMethod(jobName);
+//paramemters=輸入參數
+mInfo.Invoke(service, paramemters ?? new object[] { });
+2.建立委派，以委派方式呼叫
+var thisParameter = Expression.Constant(service);
+var act = Expression.Lambda<Action>(Expression.Call(thisParameter, mInfo)).Compile();
+act();
