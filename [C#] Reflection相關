@@ -21,3 +21,10 @@ mInfo.Invoke(service, paramemters ?? new object[] { });
 var thisParameter = Expression.Constant(service);
 var act = Expression.Lambda<Action>(Expression.Call(thisParameter, mInfo)).Compile();
 act();
+3. 未實作
+MethodCallExpression GetCallExpression<T>(Expression<Func<T>> e)
+{
+    return e.Body as MethodCallExpression;
+}
+
+var getRowValExpr = GetCallExpression(x => x.GetRowValue(0));
