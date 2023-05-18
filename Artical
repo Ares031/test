@@ -42,3 +42,6 @@ https://blog.darkthread.net/blog/async-aspnet/
 
 C# MVC 上傳進度條
 https://blog.darkthread.net/blog/upload-progress-bar-w-xhr2/
+
+await與Task.Result/Task.Wait()的Deadlock問題
+https://blog.darkthread.net/blog/await-task-block-deadlock/
